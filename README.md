@@ -34,7 +34,7 @@ ollama list
 Clone this repository or create a new project
 
 ```sh
-gh repo create demo --template pauldotyu/agent-framework-quickstart-with-local-llms --clone --private
+gh repo create demo --template pauldotyu/agent-framework-with-local-llms --clone --private
 cd demo
 ```
 

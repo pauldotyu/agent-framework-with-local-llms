@@ -1,5 +1,5 @@
 [project]
-name = "agent-framework-quickstart"
+name = "agent-framework-with-local-llms"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
