@@ -66,7 +66,11 @@ The `main.py` file contains a simple agent example:
 import asyncio
 
 from agent_framework import ChatAgent
+from agent_framework.observability import configure_otel_providers
 from agent_framework.openai import OpenAIChatClient
+
+configure_otel_providers(enable_sensitive_data=True)
+
 
 async def main():
     async with (
@@ -100,8 +104,8 @@ OPENAI_API_KEY=none
 
 Optional observability settings:
 
-- **ENABLE_OTEL**: Set to `true` to enable OpenTelemetry observability
-- **OTLP_ENDPOINT**: The endpoint for the OpenTelemetry collector
+- **ENABLE_INSTRUMENTATION**: Set to `true` to enable OpenTelemetry observability
+- **OTEL_EXPORTER_OTLP_ENDPOINT**: The endpoint for the OpenTelemetry collector
 
 See next section for observability setup.
 
@@ -121,18 +125,18 @@ docker compose up -d
 
 This will start:
 
-- Redis for chat history storage
 - OpenTelemetry Collector for collecting telemetry data
 - Loki for logs
 - Grafana for visualization
 - Tempo for traces
 - Prometheus for metrics
+- Redis for chat history storage (not implemented in main.py)
 
 Update your `.env` file to enable OpenTelemetry
 
 ```properties
-ENABLE_OTEL=true
-OTLP_ENDPOINT=http://localhost:4317
+ENABLE_INSTRUMENTATION=true
+OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317
 ```
 
 Run your agent with observability enabled

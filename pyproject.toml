@@ -5,12 +5,13 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "agent-framework>=1.0.0b251016",
+    "agent-framework>=1.0.0b260116",
+    "opentelemetry-exporter-otlp-proto-grpc>=1.39.1",
 ]
 
 [dependency-groups]
 dev = [
-    "ruff>=0.13.3",
+    "ruff>=0.14.14",
 ]
 
 [tool.uv]

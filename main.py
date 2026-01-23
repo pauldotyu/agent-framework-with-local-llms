@@ -1,10 +1,10 @@
 import asyncio
 
 from agent_framework import ChatAgent
-from agent_framework.observability import setup_observability
+from agent_framework.observability import configure_otel_providers
 from agent_framework.openai import OpenAIChatClient
 
-setup_observability(enable_sensitive_data=True)
+configure_otel_providers(enable_sensitive_data=True)
 
 
 async def main():
