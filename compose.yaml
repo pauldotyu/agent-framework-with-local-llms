@@ -1,6 +1,6 @@
 services:
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:0.137.0
+    image: otel/opentelemetry-collector-contrib:0.145.0
     ports:
       - "4317:4317" # gRPC
       - "4318:4318" # HTTP
@@ -17,7 +17,7 @@ services:
       - rage
 
   loki:
-    image: grafana/loki:3.5.7
+    image: grafana/loki:3.6
     ports:
       - "3100:3100"
     volumes:
@@ -27,7 +27,7 @@ services:
       - rage
 
   tempo:
-    image: grafana/tempo:2.9.0
+    image: grafana/tempo:2.10.1
     command: ["-config.file=/etc/tempo.yaml"]
     user: "root"
     volumes:
@@ -40,7 +40,7 @@ services:
       - rage
 
   prometheus:
-    image: prom/prometheus:v3.6.0
+    image: prom/prometheus:v3.9.1
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.path=/prometheus"
@@ -56,7 +56,7 @@ services:
       - rage
 
   grafana:
-    image: grafana/grafana:11.6.0
+    image: grafana/grafana:12.3
     environment:
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
       - GF_AUTH_ANONYMOUS_ENABLED=true
@@ -119,7 +119,7 @@ services:
       - rage
 
   redis:
-    image: redis:8.2.2-alpine
+    image: redis:8.6.0
     ports:
       - "6379:6379"
     restart: unless-stopped
