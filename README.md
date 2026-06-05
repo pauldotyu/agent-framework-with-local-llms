@@ -4,7 +4,7 @@ A quick start guide for building AI agents using Microsoft's Agent Framework wit
 
 ## Prerequisites
 
-- [Python 3.11+](https://www.python.org/downloads/)
+- [Python 3.12+](https://www.python.org/downloads/)
 - [uv](https://docs.astral.sh/uv/) for Python package management
 - [Ollama](https://ollama.ai/) installed and running locally
 - [vLLM](https://docs.vllm.ai/) (optional, if you want to use vLLM)
@@ -50,6 +50,8 @@ Create a `.env` file by copying the provided example
 cp .env.example .env
 ```
 
+> **Note:** The `.env.example` has observability enabled by default. If you're not running the Docker observability stack yet, set `ENABLE_INSTRUMENTATION=false` in your `.env` file to avoid connection errors.
+
 ### 3. Run your first agent
 
 ```sh
@@ -65,17 +67,19 @@ The `main.py` file contains a simple agent example:
 ```python
 import asyncio
 
-from agent_framework import ChatAgent
+from agent_framework import Agent
 from agent_framework.observability import configure_otel_providers
 from agent_framework.openai import OpenAIChatClient
+from dotenv import load_dotenv
 
+load_dotenv()
 configure_otel_providers(enable_sensitive_data=True)
 
 
 async def main():
     async with (
-        ChatAgent(
-            chat_client=OpenAIChatClient(),
+        Agent(
+            client=OpenAIChatClient(),
             name="Joker",
             instructions="You are good at telling jokes.",
         ) as agent,
@@ -90,24 +94,21 @@ if __name__ == "__main__":
 
 ## Environment Configuration
 
-The project includes a `.env.sample` file that helps you configures the connection to your local LLM.
+The project includes a `.env.example` file that configures the connection to your local LLM.
 
 ```properties
 OPENAI_BASE_URL=http://localhost:11434/v1
-OPENAI_CHAT_MODEL_ID=gpt-oss:20b
+OPENAI_CHAT_MODEL=gpt-oss:20b
 OPENAI_API_KEY=none
+ENABLE_INSTRUMENTATION=true
+OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317
 ```
 
 - **OPENAI_BASE_URL**: Points to OpenAI API compatible inference server
-- **OPENAI_CHAT_MODEL_ID**: The model you want to use
+- **OPENAI_CHAT_MODEL**: The model you want to use
 - **OPENAI_API_KEY**: Set to "none" for local servers that don't require authentication
-
-Optional observability settings:
-
-- **ENABLE_INSTRUMENTATION**: Set to `true` to enable OpenTelemetry observability
+- **ENABLE_INSTRUMENTATION**: Set to `true` to enable OpenTelemetry observability (requires the observability stack below)
 - **OTEL_EXPORTER_OTLP_ENDPOINT**: The endpoint for the OpenTelemetry collector
-
-See next section for observability setup.
 
 ## Optional: Observability with OpenTelemetry and Grafana's LGTM stack
 
@@ -132,7 +133,7 @@ This will start:
 - Prometheus for metrics
 - Redis for chat history storage (not implemented in main.py)
 
-Update your `.env` file to enable OpenTelemetry
+Make sure your `.env` file has observability enabled (this is the default in `.env.example`):
 
 ```properties
 ENABLE_INSTRUMENTATION=true
